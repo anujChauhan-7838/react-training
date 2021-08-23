@@ -1,4 +1,4 @@
-export default function Nav(){
+function Nav(){
     return (
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -38,3 +38,5 @@ export default function Nav(){
 </nav>
     );
 }
+
+export default Nav;
