@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Nav from './components/Nav';
-import Cake from './components/Cake';
+import Cakelist from './components/Cakelist';
 var cke = [
   {
     name:"Chocolate 1",
@@ -98,7 +98,7 @@ function App() {
    <div className="container">
      <div className="row" style={{"textAlign":"center"}}><strong>Cake List</strong></div>
    <div className="row">
-   <Cake cakes={cke}></Cake>
+   <Cakelist cakes={cke}></Cakelist>
    </div>
    </div>
    
