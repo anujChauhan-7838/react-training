@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Nav from './components/Nav';
 import Cakelist from './components/Cakelist';
+import Signup from "./components/Signup";
 var cke = [
   {
     name:"Chocolate 1",
@@ -99,6 +100,11 @@ function App() {
      <div className="row" style={{"textAlign":"center"}}><strong>Cake List</strong></div>
    <div className="row">
    <Cakelist cakes={cke}></Cakelist>
+
+   
+   </div>
+   <div className="row">
+   <Signup></Signup>
    </div>
    </div>
    
