@@ -12,7 +12,7 @@ export default function Cake(props){
               <div className="card-body">
                   <h5 className="card-title">{cake.name}</h5>
                   <p className="card-text">{"$"+cake.price}</p>
-                  <a href="#" className="btn btn-primary">Go somewhere</a>
+                  <a href="#" className="btn btn-primary">Add To Cart</a>
               </div>
               </div>
               
