@@ -16,7 +16,7 @@ export default function Cake(props){
               </div>
               </div>
               
-        </div>
+        </div> 
              
     )
 }
