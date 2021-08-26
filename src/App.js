@@ -95,7 +95,7 @@ var cke = [
 function App() {
   return (
     <div>
-   <Nav></Nav>
+   
    <div className="container">
      <div className="row" style={{"textAlign":"center"}}><strong>Cake List</strong></div>
    <div className="row">

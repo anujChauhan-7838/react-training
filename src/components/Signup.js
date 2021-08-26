@@ -1,5 +1,6 @@
 import React from "react";
 import { Component } from "react";
+import {Link} from "react-router-dom";
 import FormErrors from './FormErrors';
 
 class Signup extends Component{
@@ -94,38 +95,39 @@ class Signup extends Component{
 
     render(){
         return (
-            <div>
-            <div className="formErrors">
-                <FormErrors formErrors={this.state.formErrors} />
+          <div className="container">
+            <div className="panel panel-default">
+                   <FormErrors formErrors={this.state.formErrors} />
             </div>
-            <form method="post"  onSubmit={(event) => this.checkFormAndSubmit(event)}>
-            <div className={`form-group
-                 ${this.errorClass(this.state.formErrors.name)}`}>
-              <label htmlFor="exampleInputName">Name</label>
-              <input type="text" name="name" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter name" onChange={(event) => this.handleUserInput(event)}/>
-              <small id="nameHelp" className="form-text text-muted"></small>
-            </div>
-            <div className={`form-group
-                 ${this.errorClass(this.state.formErrors.username)}`}>
-              <label htmlFor="exampleInputEmail1">Email address</label>
-              <input type="email" name="username" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={(event) => this.handleUserInput(event)}/>
-              <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-            <div className={`form-group
-                 ${this.errorClass(this.state.formErrors.password)}`}>
-              <label htmlFor="exampleInputPassword1">Password</label>
-              <input type="password"  name="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={(event) => this.handleUserInput(event)} />
-            </div>
-            <div className={`form-group
-                 ${this.errorClass(this.state.formErrors.cpassword)}`}>
-              <label htmlFor="exampleInputPassword1">Confirm Password</label>
-              <input type="password"  name="cpassword" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={(event) => this.handleUserInput(event)} />
-            </div>
-            <button type="submit" className="btn btn-primary"  
-               disabled={!this.state.formValid}>Submit</button>
+          <div className="signup-form">
+          <form onSubmit={(event)=>this.checkFormAndSubmit} method="post">
+          <h2>Register</h2>
+          <p className="hint-text">Create your account. It's free and only takes a minute.</p>
+              <div className="form-group">
+            <div className="row">
+              <div className="col">
+                <input type="text" className="form-control" name="name" placeholder="Name" required="required"  onChange={(event) =>this.handleUserInput(event)}/>
+                </div>
+              
+            </div>        	
+              </div>
+              <div className="form-group">
+                <input type="email" className="form-control" name="username" placeholder="Email" required="required" onChange={(event) =>this.handleUserInput(event)} autocomplete="off" style={{"background-image": "url(&quot;chrome-extension://igkpcodhieompeloncfnbekccinhapdb/images/vault-white-48.svg&quot;)", "background-repeat": "no-repeat", "background-position": "99% center", "background-size": "14px"}} />
+              </div>
+          <div className="form-group">
+                  <input type="password" className="form-control" name="password" onChange={(event) =>this.handleUserInput(event)} placeholder="Password" required="required" autocomplete="off" style={{"background-image": "url(&quot;chrome-extension://igkpcodhieompeloncfnbekccinhapdb/images/vault-white-48.svg&quot;)", "background-repeat": "no-repeat", "background-position": "99% center", "background-size": "14px", "cursor": "pointer"}} />
+              </div>
+          <div className="form-group">
+                  <input type="password" className="form-control" name="cpassword" onChange={(event) =>this.handleUserInput(event)} placeholder="Confirm Password" required="required" />
+              </div>        
+              
+          <div className="form-group">
+                  <button type="submit" class="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>Register Now</button>
+              </div>
           </form>
-          </div>
-         
+        <div class="text-center">Already have an account? <Link to="/signin"> Sign in</Link></div>
+      </div>                    
+      </div>   
         );
     }
 }
