@@ -9,7 +9,6 @@ import Spinner from 'react-bootstrap/Spinner';
 class Signup extends Component{
     
     constructor(props){
-      this.props = props;
         super();
         this.state = {
             "name":"",
