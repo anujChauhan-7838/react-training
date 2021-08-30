@@ -98,11 +98,11 @@ function Home() {
    
    <div className="container">
      <div className="row" style={{"textAlign":"center"}}><strong>Cake List</strong></div>
-   <div className="row">
+   
    <Cakelist cakes={cke}></Cakelist>
 
    
-   </div>
+   
   
    </div>
    

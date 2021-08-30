@@ -2,31 +2,59 @@ import React from "react";
 import { Component } from "react";
 import {Link} from "react-router-dom";
 import FormErrors from './FormErrors';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.css';
+import Spinner from 'react-bootstrap/Spinner';
 
 class Signup extends Component{
     
-    constructor(){
+    constructor(props){
+      this.props = props;
         super();
         this.state = {
             "name":"",
             "username":"",
             "password":"",
             "cpassword":"",
-            "formErrors": {'username': '', 'password': '','name':'','cpassword':''},
+            "formErrors": {'username': '', 'password': '','name':'','cpassword':'','gError':''},
             "nameValid": false,
             "usernameValid": false,
             "passwordValid": false,
             "cpasswordValid": false,
-            "formValid": false
+            "formValid": false,
+            "showRegBtn":true
         }
     }
 
     checkFormAndSubmit = (event) =>{
-        event.preventDeafult();
+        event.preventDefault();
         this.validateField('name',this.state.name);
         this.validateField('username',this.state.username);
         this.validateField('password',this.state.password);
         this.validateField('cpassword',this.state.cpassword);
+        this.state.showRegBtn = false;
+        axios({
+          method:"post",
+          url:"https://mighty-refuge-98472.herokuapp.com/auth/register",
+          data:{name:this.state.name,'email':this.state.username,'password':this.state.password}
+        }).then((response)=>{
+              console.log('Register api -----')
+              console.log(response.data);
+              if(response.data.status == 1){
+                   this.props.history.push('/otp-verify');
+              }else{
+                this.setState({formErrors:{...this.state.formErrors,gError:response.data.message}});
+              }
+
+              this.setState({showRegBtn:true});
+              
+        }).catch((error)=>{
+            console.log('Cake list is not loaded'+error);
+            this.setState({showRegBtn:true});
+            this.setState({formErrors:{...this.state.formErrors,gError:error}});
+           
+            
+        });
         
 
     }
@@ -94,13 +122,17 @@ class Signup extends Component{
      }
 
     render(){
+      var regBtn = <span>Register Now</span>;
+      if(!this.state.showRegBtn){
+       regBtn =  <span><Spinner animation="border" variant="primary" /></span>
+      }
         return (
           <div className="container">
             <div className="panel panel-default">
                    <FormErrors formErrors={this.state.formErrors} />
             </div>
           <div className="signup-form">
-          <form onSubmit={(event)=>this.checkFormAndSubmit} method="post">
+          <form onSubmit={(event)=>this.checkFormAndSubmit(event)}>
           <h2>Register</h2>
           <p className="hint-text">Create your account. It's free and only takes a minute.</p>
               <div className="form-group">
@@ -122,7 +154,11 @@ class Signup extends Component{
               </div>        
               
           <div className="form-group">
-                  <button type="submit" class="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>Register Now</button>
+                  <button type="submit" class="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>
+                       {regBtn}
+                    </button>
+                    
+                    
               </div>
           </form>
         <div class="text-center">Already have an account? <Link to="/signin"> Sign in</Link></div>

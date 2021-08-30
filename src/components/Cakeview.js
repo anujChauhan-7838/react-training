@@ -1,41 +1,33 @@
-import Cake from './Cake';
 import axios from 'axios';
 import {useState , useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Spinner from 'react-bootstrap/Spinner';
-
-export default function Search(props){
-    console.log(props);
+import Newcake from './Newcake';
+export default function Cakeview(props){
     var [cakes,setCakes] = useState([]);
     var [searching,setSearching] = useState(true);
-    
- 
 
     useEffect(()=>{
         axios({
             method:"get",
-            url:"https://mighty-refuge-98472.herokuapp.com/cake-list?search="+props.match.params.searchBy
+            url:"https://mighty-refuge-98472.herokuapp.com/cake-list?search="+props.match.params.cakeSlug
         }).then(function(response){
               console.log(response.data);
-              setSearching(false);
               setCakes(response.data);
               
         }).catch(function(error){
             console.log('Cake list is not loaded'+error);
-            setSearching(false);
             setCakes([]);     
             
         });
     },[])
-     
-
 
     if(cakes.length > 0 ){
         return (
             <div className="row">
             {
                     cakes.map((cake,index)=>
-                    <Cake cake={cake} key={index}></Cake>
+                    <Newcake cake={cake} key={index}></Newcake>
             )
             }
             </div>
@@ -58,5 +50,6 @@ export default function Search(props){
         }
        
     }
+   
     
 }

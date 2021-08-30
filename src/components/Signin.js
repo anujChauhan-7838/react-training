@@ -2,6 +2,9 @@ import React from "react";
 import { Component } from "react";
 import {Link} from "react-router-dom";
 import FormErrors from './FormErrors';
+import 'bootstrap/dist/css/bootstrap.css';
+import Spinner from 'react-bootstrap/Spinner';
+import axios from "axios";
 
 class Signin extends Component{
     
@@ -10,17 +13,42 @@ class Signin extends Component{
         this.state = {
             "username":"",
             "password":"",
-            "formErrors": {'username': '', 'password': ''},
+            "formErrors": {'username': '', 'password': '','gError':''},
             "usernameValid": false,
             "passwordValid": false,
-            "formValid": false
+            "formValid": false,
+            "showLogBtn":true
         }
     }
 
     checkFormAndSubmit = (event) =>{
-        event.preventDeafult();
+        event.preventDefault();
         this.validateField('username',this.state.username);
         this.validateField('password',this.state.password);
+        this.state.showLogBtn = false;
+        axios({
+          method:"post",
+          url:"https://mighty-refuge-98472.herokuapp.com/auth/login",
+          data:{'email':this.state.username,'password':this.state.password}
+        }).then((response)=>{
+              console.log('Login api -----')
+              console.log(response.data);
+              if(response.data.status == 1){
+                   this.props.history.push('/');
+              }else{
+                this.setState({formErrors:{...this.state.formErrors,gError:response.data.message}});
+              }
+
+              this.setState({showLogBtn:true});
+              
+        }).catch((error)=>{
+            console.log('Cake list is not loaded'+error);
+            this.setState({showLogBtn:true});
+            this.setState({formErrors:{...this.state.formErrors,gError:error}});
+           
+            
+        });
+
     }
 
     handleUserInput  = (event) => {
@@ -65,6 +93,10 @@ class Signin extends Component{
      }
 
     render(){
+      var logBtn = <span>Register Now</span>;
+      if(!this.state.showLogBtn){
+       logBtn =  <span><Spinner animation="border" variant="primary" /></span>
+      }
         return (
           <div className="container">
               <div className="panel panel-default">
@@ -82,7 +114,7 @@ class Signin extends Component{
         </div>
           
         <div className="form-group">
-            <button type="submit" class="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>Login Now</button>
+            <button type="submit" class="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>{logBtn}</button>
         </div>
         </form>
         <div class="text-center">Already have an account? <Link to="/signup"> Sign Up</Link></div>
