@@ -10,6 +10,8 @@ import Cart from './Cart';
 import Forgot from './Forgot';
 import Otpverify from './Optiverify';
 import Cakeview from './Cakeview';
+import Footer from './Footer';
+
 
 
 
@@ -21,6 +23,7 @@ function NewApp(){
               <BrowserRouter>
               <div>
               <Nav></Nav>
+              
               <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/signin" component={Signin} />
@@ -36,6 +39,8 @@ function NewApp(){
               </Switch>
               </div>
               </BrowserRouter>
+              <Footer></Footer>
+    
           </div>
     )
 }

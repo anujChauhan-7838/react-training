@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 function Nav(props){
+  console.log("Nav searc" ,props);
     var [search, setSearch] = useState('');
     var [searchInvalid,setSearchInvalid] = useState(false);
     
@@ -51,7 +52,7 @@ function validateField(value){
   <div className="collapse navbar-collapse" id="navbarSupportedContent">
     <ul className="navbar-nav mr-auto">
       <li className="nav-item active">
-        <Link className="nav-link" to="/">Home</Link> 
+        <Link className="nav-link" to="/"><img src={window.location.origin+"/assests/images/logo.png"}  style={{width:"91px"}}/></Link> 
       </li>
     </ul>
     <form className="form-inline my-2 my-lg-0" onSubmit={(event)=>handleSearchForm(event)}>

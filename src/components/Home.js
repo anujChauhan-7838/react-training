@@ -3,6 +3,7 @@ import '../App.css';
 import Nav from './Nav';
 import Cakelist from './Cakelist';
 import Signup from "./Signup";
+import Crousal from "./Crousal";
 var cke = [
   {
     name:"Chocolate 1",
@@ -95,7 +96,7 @@ var cke = [
 function Home() {
   return (
     <div>
-   
+<Crousal></Crousal>
    <div className="container">
      <div className="row" style={{"textAlign":"center"}}><strong>Cake List</strong></div>
    
