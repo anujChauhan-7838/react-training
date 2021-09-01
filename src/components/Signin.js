@@ -31,8 +31,7 @@ class Signin extends Component{
           url:"https://mighty-refuge-98472.herokuapp.com/auth/login",
           data:{'email':this.state.username,'password':this.state.password}
         }).then((response)=>{
-              console.log('Login api -----')
-              console.log(response.data);
+             
               if(response.data.status == 1){
                    this.props.history.push('/');
               }else{
@@ -42,7 +41,7 @@ class Signin extends Component{
               this.setState({showLogBtn:true});
               
         }).catch((error)=>{
-            console.log('Cake list is not loaded'+error);
+           
             this.setState({showLogBtn:true});
             this.setState({formErrors:{...this.state.formErrors,gError:error}});
            

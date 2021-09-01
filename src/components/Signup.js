@@ -37,8 +37,7 @@ class Signup extends Component{
           url:"https://mighty-refuge-98472.herokuapp.com/auth/register",
           data:{name:this.state.name,'email':this.state.username,'password':this.state.password}
         }).then((response)=>{
-              console.log('Register api -----')
-              console.log(response.data);
+             
               if(response.data.status == 1){
                    this.props.history.push('/otp-verify');
               }else{
@@ -48,7 +47,7 @@ class Signup extends Component{
               this.setState({showRegBtn:true});
               
         }).catch((error)=>{
-            console.log('Cake list is not loaded'+error);
+            
             this.setState({showRegBtn:true});
             this.setState({formErrors:{...this.state.formErrors,gError:error}});
            
@@ -80,7 +79,6 @@ class Signup extends Component{
                     fieldValidationErrors.name = nameValid ? '' : ' is required';
                 }else{
                     nameValid = value.match(/^[a-zA-Z]*$/i);
-                    console.log('nameValue = '+nameValid);
                     fieldValidationErrors.name = nameValid ? '' : ' is invalid';
                 }
                 

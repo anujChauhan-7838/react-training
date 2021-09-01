@@ -28,8 +28,7 @@ class Otpverify extends Component{
           url:"https://mighty-refuge-98472.herokuapp.com/auth/verify-otp",
           data:{otp:this.state.otp}
         }).then((response)=>{
-              console.log('Register api -----')
-              console.log(response.data);
+              
               if(response.data.status == 1){
                    this.props.history.push('/signin');
               }else{
@@ -38,7 +37,7 @@ class Otpverify extends Component{
               this.setState({showVBtn:true});
               
         }).catch((error)=>{
-            console.log('Cake list is not loaded'+error);
+            
             this.setState({showVBtn:true});
             this.setState({formErrors:{...this.state.formErrors,gError:error}});
            

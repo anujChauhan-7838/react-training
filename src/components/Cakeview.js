@@ -12,11 +12,11 @@ export default function Cakeview(props){
             method:"get",
             url:"https://mighty-refuge-98472.herokuapp.com/cake-list?search="+props.match.params.cakeSlug
         }).then(function(response){
-              console.log(response.data);
+             
               setCakes(response.data);
               
         }).catch(function(error){
-            console.log('Cake list is not loaded'+error);
+            
             setCakes([]);     
             
         });

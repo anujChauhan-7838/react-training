@@ -1,21 +1,23 @@
 import React from "react";
-import {Link , withRouter} from "react-router-dom";
+import {Link , withRouter,useLocation} from "react-router-dom";
 import {useState , useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import  queryString from 'query-string';
 
 
 function Nav(props){
-  console.log("Nav searc" ,props);
-    var [search, setSearch] = useState('');
-    var [searchInvalid,setSearchInvalid] = useState(false);
+  
     
+    var [searchInvalid,setSearchInvalid] = useState(false);
+    var query                            = queryString.parse(useLocation().search);
+    var [search, setSearch] = useState(query.search);
 
 
 function handleSearchForm(event){
   event.preventDefault();
   validateField(search);
   if(search != ''){
-    props.history.push('/search/'+search);
+    props.history.push('/search?search='+search);
   }
 }
 
@@ -23,7 +25,6 @@ function handleSearchForm(event){
 function handleInputBx(event){
   var name = event.target.name;
   var value= event.target.value;
-  console.log(name , value);
   setSearch(value);
   validateField(value);
 
@@ -56,7 +57,7 @@ function validateField(value){
       </li>
     </ul>
     <form className="form-inline my-2 my-lg-0" onSubmit={(event)=>handleSearchForm(event)}>
-      <input className={"form-control mr-sm-2" + (searchInvalid ? "border border-danger":'')} type="text"  name = "search" placeholder="Search" aria-label="Search" onChange={(event)=>handleInputBx(event)} />
+      <input value={search} className={"form-control mr-sm-2" + (searchInvalid ? "border border-danger":'')} type="text"  name = "search" placeholder="Search" aria-label="Search" onChange={(event)=>handleInputBx(event)} />
       <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       <button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signin">
       Sign In

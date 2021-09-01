@@ -41,7 +41,6 @@ export default function Admin(){
         var SearchedUsers =   userList.filter((user)=>{
              return user.name.toLowerCase().includes(event.target.value.toLowerCase()) ||  user.position.toLowerCase().includes(event.target.value.toLowerCase()) || user.office.toLowerCase().includes(event.target.value.toLowerCase());
           });
-          console.log(SearchedUsers);
           setUsers(SearchedUsers);
       }
     return (

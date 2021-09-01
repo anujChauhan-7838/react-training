@@ -1,8 +1,6 @@
 import { Link, withRouter } from "react-router-dom";
 function Cake(props){
-    console.log(props);
     const cake = props.cake;
-    console.log(cake)
     let typeClassName = cake.type=="veg"?"green":"red";
 
     function viewPage(event , cakeName){
