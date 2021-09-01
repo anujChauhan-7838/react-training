@@ -15,6 +15,7 @@ export default function Search(props){
     
     
     useEffect(()=>{
+        setCakes([]);
         setSearching(true);
         axios({
             method:"get",
