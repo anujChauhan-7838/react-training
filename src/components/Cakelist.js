@@ -6,11 +6,10 @@ import Spinner from 'react-bootstrap/Spinner';
 export default function Cakelist(props){
     
     var [cakes,setCakes] = useState([]);
-
     useEffect(()=>{
         axios({
             method:"get",
-            url:"https://mighty-refuge-98472.herokuapp.com/cake-list"
+            url:process.env.REACT_APP_BASEURL+"/cake-list"
         }).then(function(response){
               
               setCakes(response.data);
