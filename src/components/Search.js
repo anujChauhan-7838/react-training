@@ -37,12 +37,14 @@ export default function Search(props){
 
     if(cakes.length > 0 ){
         return (
+            <div className="container">
             <div className="row">
             {
                     cakes.map((cake,index)=>
                     <Cake cake={cake} key={index}></Cake>
             )
             }
+            </div>
             </div>
         );
     }else{

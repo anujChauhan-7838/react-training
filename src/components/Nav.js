@@ -10,7 +10,8 @@ function Nav(props){
     
     var [searchInvalid,setSearchInvalid] = useState(false);
     var query                            = queryString.parse(useLocation().search);
-    var [search, setSearch] = useState(query.search);
+    var initSearch = typeof query.search != 'undefined'? query.search : '';
+    var [search, setSearch] = useState(initSearch);
 
 
 function handleSearchForm(event){
