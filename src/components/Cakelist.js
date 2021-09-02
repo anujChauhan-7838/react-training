@@ -26,7 +26,7 @@ export default function Cakelist(props){
 
     if(cakes.length > 0){
         return (
-            <div className="row">hi
+            <div className="row">
             {
                     cakes.map((cake,index)=>
                     <Cake cake={cake} key={index}></Cake>
