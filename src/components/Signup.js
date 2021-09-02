@@ -34,7 +34,7 @@ class Signup extends Component{
         this.state.showRegBtn = false;
         axios({
           method:"post",
-          url:"https://mighty-refuge-98472.herokuapp.com/auth/register",
+          url:process.env.REACT_APP_BASEURL+"/auth/register",
           data:{name:this.state.name,'email':this.state.username,'password':this.state.password}
         }).then((response)=>{
              

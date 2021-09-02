@@ -25,7 +25,7 @@ class Otpverify extends Component{
         this.state.showVBtn = false;
         axios({
           method:"post",
-          url:"https://mighty-refuge-98472.herokuapp.com/auth/verify-otp",
+          url:process.env.REACT_APP_BASEURL+"/auth/verify-otp",
           data:{otp:this.state.otp}
         }).then((response)=>{
               

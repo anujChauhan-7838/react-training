@@ -10,7 +10,7 @@ export default function Cakeview(props){
     useEffect(()=>{
         axios({
             method:"get",
-            url:"https://mighty-refuge-98472.herokuapp.com/cake-list?search="+props.match.params.cakeSlug
+            url:process.env.REACT_APP_BASEURL+"/cake-list?search="+props.match.params.cakeSlug
         }).then(function(response){
              
               setCakes(response.data);

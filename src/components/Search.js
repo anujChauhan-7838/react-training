@@ -19,7 +19,7 @@ export default function Search(props){
         setSearching(true);
         axios({
             method:"get",
-            url:"https://mighty-refuge-98472.herokuapp.com/cake-list?search="+query.search
+            url:process.env.REACT_APP_BASEURL+"/cake-list?search="+query.search
         }).then(function(response){
               
               setSearching(false);
