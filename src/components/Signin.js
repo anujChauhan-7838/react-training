@@ -33,6 +33,7 @@ class Signin extends Component{
         }).then((response)=>{
              
               if(response.data.status == 1){
+                   localStorage.setItem('token',response.data.access_token)
                    this.props.history.push('/');
               }else{
                 this.setState({formErrors:{...this.state.formErrors,gError:response.data.message}});
@@ -91,6 +92,10 @@ class Signin extends Component{
         return(error.length === 0 ? '' : 'has-error');
      }
 
+     componentWillUnmount(){
+       this.setState({...this.state});
+     }
+
     render(){
       var logBtn = <span>Register Now</span>;
       if(!this.state.showLogBtn){
@@ -106,18 +111,18 @@ class Signin extends Component{
           <h2>Login</h2>
           
         <div className="form-group">
-                <input type="email" onChange={(event)=>this.handleUserInput(event)} className="form-control" name="username" placeholder="Email" required="required" autocomplete="off" style={{"background-image": "url(&quot;chrome-extension://igkpcodhieompeloncfnbekccinhapdb/images/vault-white-48.svg&quot;)", "background-repeat": "no-repeat", "background-position": "99% center", "background-size": "14px"}} />
+                <input type="email" onChange={(event)=>this.handleUserInput(event)} className="form-control" name="username" placeholder="Email" required="required" autoComplete="off" style={{"backgroundImage": "url(&quot;chrome-extension://igkpcodhieompeloncfnbekccinhapdb/images/vault-white-48.svg&quot;)", "backgroundRepeat": "no-repeat", "backgroundPosition": "99% center", "backgroundSize": "14px"}} />
         </div>
         <div className="form-group">
-                  <input type="password" onChange={(event)=>this.handleUserInput(event)} className="form-control" name="password" placeholder="Password" required="required" autocomplete="off" style={{"background-image": "url(&quot;chrome-extension://igkpcodhieompeloncfnbekccinhapdb/images/vault-white-48.svg&quot;)", "background-repeat": "no-repeat", "background-position": "99% center", "background-size": "14px", "cursor": "pointer"}} />
+                  <input type="password" onChange={(event)=>this.handleUserInput(event)} className="form-control" name="password" placeholder="Password" required="required" autoComplete="off" style={{"backgroundImage": "url(&quot;chrome-extension://igkpcodhieompeloncfnbekccinhapdb/images/vault-white-48.svg&quot;)", "backgroundRepeat": "no-repeat", "backgroundPosition": "99% center", "backgroundSize": "14px", "cursor": "pointer"}} />
         </div>
           
         <div className="form-group">
-            <button type="submit" class="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>{logBtn}</button>
+            <button type="submit" className="btn btn-success btn-lg btn-block" disabled={!this.state.formValid}>{logBtn}</button>
         </div>
         </form>
-        <div class="text-center">Already have an account? <Link to="/signup"> Sign Up</Link></div>
-        <div class="text-center">I have forgot my password? <Link to="/forgot"> Forgot</Link></div>
+        <div className="text-center">Already have an account? <Link to="/signup"> Sign Up</Link></div>
+        <div className="text-center">I have forgot my password? <Link to="/forgot"> Forgot</Link></div>
       </div>                    
       </div>   
         );

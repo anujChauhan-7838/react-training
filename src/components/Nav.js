@@ -30,6 +30,12 @@ function handleInputBx(event){
 
 }
 
+function logout(event){
+    event.preventDefault();
+    localStorage.removeItem("token");
+    props.history.push('/signin');
+}
+
 function validateField(value){
   if(value  == ''){
     setSearchInvalid(true);
@@ -41,7 +47,8 @@ function validateField(value){
 
 
       
-    
+    console.log("localstroage="+localStorage.getItem('token'));
+   
       return  (
       
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -59,14 +66,24 @@ function validateField(value){
     <form className="form-inline my-2 my-lg-0" onSubmit={(event)=>handleSearchForm(event)}>
       <input value={search} className={"form-control mr-sm-2" + (searchInvalid ? "border border-danger":'')} type="text"  name = "search" placeholder="Search" aria-label="Search" onChange={(event)=>handleInputBx(event)} />
       <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      <button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signin">
-      Sign In
-    </Link>
-    </button>
-    <button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signup">
-      Sign Up
-    </Link>
-    </button>
+      {(typeof localStorage.getItem('token') == 'undefined' || localStorage.getItem('token') == null)?<div><button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signin">
+       Sign In
+     </Link>
+     </button>
+     <button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signup">
+       Sign Up
+     </Link>
+     </button></div>:<div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
+      <ul className="navbar-nav">
+        <li className="nav-item dropdown">
+        <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={(event)=>logout(event)}>
+       Logout
+     
+     </button>
+          
+        </li>
+      </ul>
+    </div>}
     </form>
     
   </div>
