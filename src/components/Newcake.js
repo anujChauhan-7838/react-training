@@ -22,7 +22,7 @@ function Newcake(props){
                <div className="container">
                   <div className="row">
                      <div className="col">
-                     <img className="img-thumbnail" alt="..." src="https://res.cloudinary.com/ashudev/image/upload/v1623225127/ok6edwgmidrpaojiexg8.jpg"/></div>
+                     <img className="img-thumbnail" alt="..." src={process.env.REACT_APP_IMAGE_URL+'/'+cake.img}/></div>
                      <div className="col-6">
                         <div className="card" style={{"border":"none"}}>
                            <div className="card-body">
