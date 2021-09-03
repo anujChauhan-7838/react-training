@@ -1,9 +1,13 @@
 import { Link, withRouter } from "react-router-dom";
 import { Rating, RatingView } from 'react-simple-star-rating'
+import {useState , useEffect } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
+import { toast } from "react-toastify";
+import axios from 'axios';
 function Newcake(props){
     
     const cake = props.cake;
-  
+    var [isAddingToCart,setIsAddingToCart] = useState(false);
     let typeClassName = cake.type=="veg"?"green":"red";
 
     function viewPage(event , cakeName){
@@ -11,6 +15,34 @@ function Newcake(props){
         props.history.push('/view-cake/'+cakeName);
 
     }
+  
+      function addToCart(event,data){
+          event.preventDefault();
+        setIsAddingToCart(true);
+        axios({
+          method:"post",
+          url:process.env.REACT_APP_BASEURL+"/auth/add-to-cart",
+          data:data
+        }).then((response)=>{
+            console.log('----cart api--- ');
+             console.log(response);
+             if(response.data.status == 1){
+              toast.success(response.data.message);
+             }else{
+              toast.error(response.data.message);
+             }
+             setIsAddingToCart(false);
+              
+        }).catch((error)=>{
+          toast.error(error);
+             setIsAddingToCart(false);
+        });
+      }
+      if(isAddingToCart){
+       var addToCartBtn = <span><Spinner animation="border" variant="primary" /></span>;
+      }else{
+       var addToCartBtn = <span>Add To Cart</span>;
+      }
     return (
         <div className="col-sm-4" style={{"marginTop":"30px",width:"100%"}}>
         <h1 style={{'marginLeft':"160px"}}>{cake.name}</h1>
@@ -55,7 +87,7 @@ function Newcake(props){
                                  </tbody>
                               </table>
                               <p>
-                              <button type="button" class="btn btn-success">Add To Cart</button>
+                              <button type="button" className="btn btn-success" onClick={(event)=>addToCart(event,cake)}>{addToCartBtn}</button>
                               </p>
                            </div>
                         </div>

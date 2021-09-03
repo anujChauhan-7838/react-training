@@ -22,6 +22,8 @@ export default function Cakeview(props){
         });
     },[])
 
+    
+
     if(cakes.length > 0 ){
         return (
             <div className="row">

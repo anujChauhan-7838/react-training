@@ -12,11 +12,6 @@ import Otpverify from './Optiverify';
 import Cakeview from './Cakeview';
 import Footer from './Footer';
 
-
-
-
-
-
 function NewApp(){
     return (
           <div>

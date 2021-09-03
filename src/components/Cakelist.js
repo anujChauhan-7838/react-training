@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 export default function Cakelist(props){
     
     var [cakes,setCakes] = useState([]);
+   
     useEffect(()=>{
         axios({
             method:"get",
@@ -26,6 +27,7 @@ export default function Cakelist(props){
     if(cakes.length > 0){
         return (
             <div className="row">
+             
             {
                     cakes.map((cake,index)=>
                     <Cake cake={cake} key={index}></Cake>
