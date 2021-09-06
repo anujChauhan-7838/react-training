@@ -61,8 +61,6 @@ function Cart(props){
         
     }
 
-
-    
     var removeItemFromCart = (event,index)=>{
         event.preventDefault();
         console.log(event.target.value,index);
