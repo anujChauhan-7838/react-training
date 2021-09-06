@@ -46,7 +46,6 @@ function Cart(props){
          axios({
             method:"post",
             url:process.env.REACT_APP_BASEURL+"/auth/update-p-cart",
-            url:"http://localhost:8000/auth/update-p-cart",
             data:{'cartId':carts[index].id,'qty':event.target.value}
           }).then((response)=>{
             console.log('response from update cart');
@@ -71,7 +70,6 @@ function Cart(props){
         axios({
            method:"post",
            url:process.env.REACT_APP_BASEURL+"/auth/remove-cart-item",
-           url:"http://localhost:8000/auth/remove-cart-item",
            data:{'cartId':carts[index].id}
          }).then((response)=>{
            console.log('response from update cart');
@@ -117,7 +115,6 @@ function Cart(props){
             totalAmount = totalAmount + cart.qty * parseInt(priceTagArr[1]);
         }  
         let grandTotal = totalAmount - discount;
-                          
         return (
       
             <div className="container-fluid">
