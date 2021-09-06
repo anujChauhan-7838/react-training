@@ -3,10 +3,18 @@ import {useState , useEffect } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import queryString   from 'query-string';
 import './cart.css'
+import { toast } from "react-toastify";
+import {connect} from 'react-redux';
+import {Link } from 'react-router-dom';
 
-export default function Cart(){
+function Cart(props){
     var [carts,setCarts] = useState([]);
     var [isLoading,setIsLoading] = useState(false);
+    var [discount,setDiscount] = useState(0);
+    var [qty,setQty] = useState(1);
+    var [couponCode,setCouponCode] = useState('');
+    var [couponCodeError,setCouponCodeError] = useState('');
+    var [couponCodeApplied,setCouponCodeApplied] = useState('');
     
     useEffect(()=>{
         setCarts([]);
@@ -22,13 +30,94 @@ export default function Cart(){
             console.log(carts);
               
         }).catch(function(error){
-            
             setIsLoading(false);
             setCarts([]);     
             
         });
     },[])
+
+
+   var  increaseQnty = (event ,index) => {
+         console.log(event.target.value,index);
+         var refreshingData = carts
+         refreshingData[index].qty = parseInt(event.target.value);
+         console.log(refreshingData);
+         setCarts([...refreshingData]); 
+         axios({
+            method:"post",
+            url:process.env.REACT_APP_BASEURL+"/auth/update-p-cart",
+            url:"http://localhost:8000/auth/update-p-cart",
+            data:{'cartId':carts[index].id,'qty':event.target.value}
+          }).then((response)=>{
+            console.log('response from update cart');
+                console.log(response);
+                if(response.data.status == 1){
+                }else{
+                    toast.error(response.data.message);
+                }
+                
+          }).catch((error)=>{
+            toast.error(error);
+          });
+        
+    }
+
+
+    var removeItemFromCart = (event,index)=>{
+        event.preventDefault();
+        console.log(event.target.value,index);
+        var refreshingData = carts
+        
+        axios({
+           method:"post",
+           url:process.env.REACT_APP_BASEURL+"/auth/remove-cart-item",
+           url:"http://localhost:8000/auth/remove-cart-item",
+           data:{'cartId':carts[index].id}
+         }).then((response)=>{
+           console.log('response from update cart');
+               
+               if(response.data.status == 1){
+                refreshingData.splice(index);
+                console.log(refreshingData);
+                setCarts([...refreshingData]); 
+                toast.success(response.data.message);
+                props.dispatch({
+                    type:'DESCCARTCOUNT'
+                   
+                })
+               }else{
+                   toast.error(response.data.message);
+               }
+               
+         }).catch((error)=>{
+           toast.error(error);
+         });
+    }
+
+   var  handleCouponCodeInput = (event) => {
+        setCouponCode(event.target.value);
+        setCouponCodeError('');
+        
+    }
+
+    var submitCouponCode = (event) =>{
+        event.preventDefault();
+        if(couponCode == 'DISCOUNT50'){
+           setDiscount(50);
+           setCouponCodeApplied('Coupon Successfully Applied');
+        }else{
+            setCouponCodeApplied('');
+            setCouponCodeError('Invalid Coupon');
+        }
+    }
     if(carts.length > 0){
+        let totalAmount = 0;
+        for (const [i, cart] of carts.entries()) {
+            var priceTagArr = cart.cake.price.split('$');
+            totalAmount = totalAmount + cart.qty * parseInt(priceTagArr[1]);
+        }  
+        let grandTotal = totalAmount - discount;
+                          
         return (
       
             <div className="container-fluid">
@@ -48,6 +137,8 @@ export default function Cart(){
                             <tbody>
                                     {
                                     carts.map((cart,index)=>{
+                                        var priceArr = cart.cake.price.split('$');
+                                        var price    = parseInt(priceArr[1]);
                                         return (
                                             <tr key={index}>
                                             <td>
@@ -58,16 +149,16 @@ export default function Cart(){
                                                     </figcaption>
                                                 </figure>
                                             </td>
-                                            <td> <select className="form-control">
+                                            <td> <select className="form-control" onChange={(event) =>increaseQnty(event,index)} value={cart.qty}>
                                                     <option>1</option>
                                                     <option>2</option>
                                                     <option>3</option>
                                                     <option>4</option>
                                                 </select> </td>
                                             <td>
-                                                <div className="price-wrap"> <var className="price">{cart.cake.price}</var></div>
+                                                <div className="price-wrap"> <var className="price">${ price}</var></div>
                                             </td>
-                                            <td className="text-right d-none d-md-block"> <a href="" className="btn btn-light" data-abc="true"> Remove</a> </td>
+                                            <td className="text-right d-none d-md-block"> <a href="" className="btn btn-light" data-abc="true" onClick={(event)=>removeItemFromCart(event,index)}> Remove</a> </td>
                                         </tr>
                                         )
                                     })
@@ -83,28 +174,33 @@ export default function Cart(){
             <aside className="col-lg-3">
                 <div className="card mb-3">
                     <div className="card-body">
-                        <form>
-                            <div className="form-group"> <label>Have coupon?</label>
-                                <div className="input-group"> <input type="text" className="form-control coupon" name="" placeholder="Coupon code" /> <span className="input-group-append"> <button className="btn btn-primary btn-apply coupon">Apply</button> </span> </div>
+                        <form onSubmit={(event)=>submitCouponCode(event)}>
+                            <div className="form-group" > <label>Have coupon?</label>
+                                <div className="input-group"> 
+                                <input type="text" className="form-control coupon" onChange={(event)=>handleCouponCodeInput(event)} name="couponCode" placeholder="Coupon code" /> <span className="input-group-append">
+                                     <button className="btn btn-primary btn-apply coupon" type="submit" >Apply</button> </span> </div>
                             </div>
+                            {couponCodeError && <p style={{'color':'red'}}>{couponCodeError}</p>}
+                            {couponCodeApplied && <p style={{'color':'green'}}>{couponCodeApplied}</p>}
                         </form>
                     </div>
                 </div>
+
                 <div className="card">
                     <div className="card-body">
                         <dl className="dlist-align">
                             <dt>Total price:</dt>
-                            <dd className="text-right ml-3">$69.97</dd>
+                            <dd className="text-right ml-3">${totalAmount}</dd>
                         </dl>
                         <dl className="dlist-align">
                             <dt>Discount:</dt>
-                            <dd className="text-right text-danger ml-3">- $10.00</dd>
+                            <dd className="text-right text-danger ml-3">- ${discount}</dd>
                         </dl>
                         <dl className="dlist-align">
                             <dt>Total:</dt>
-                            <dd className="text-right text-dark b ml-3"><strong>$59.97</strong></dd>
+                            <dd className="text-right text-dark b ml-3"><strong>${grandTotal}</strong></dd>
                         </dl>
-                        <hr/> <a href="#" className="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <a href="#" className="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</a>
+                        <hr/> <a href="#" className="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <Link to="/" className="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</Link>
                     </div>
                 </div>
             </aside>
@@ -130,3 +226,6 @@ export default function Cart(){
     }
     
 }
+
+
+export default connect()(Cart)

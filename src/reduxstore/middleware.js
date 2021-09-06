@@ -6,7 +6,7 @@ export var middleware = function(state){
             console.log('----middleware--------');
             console.log(localStorage.token);
             console.log(action.type);
-           if(localStorage.token && action.type == 'GETCHECKOUTCOUNT'){
+           if(localStorage.token && action.type == 'GETCHECKOUTCOUNT' ){
             axios({
                         method:"get",
                         url:process.env.REACT_APP_BASEURL+"/auth/get-cart-products"
@@ -22,6 +22,8 @@ export var middleware = function(state){
                       })   
                         
                     });
+           }else if(action.type == 'DESCCARTCOUNT'){
+              next(action);
            }else{
                next(action);
            }

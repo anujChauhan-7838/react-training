@@ -106,7 +106,7 @@ function validateField(value){
 }
 
 export default connect(function(state,props){
-  console.log('reducer state nav') ;
+  console.log('reducer state nav');
   console.log(state);
   return {
     isLoggedIn:state.isLoggedIn,

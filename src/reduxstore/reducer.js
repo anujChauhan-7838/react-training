@@ -24,9 +24,18 @@ export function reducer1(state={
           return state;
      }
      case 'GETCHECKOUTCOUNT':{
-          state = {...state}
-          return state;
+         
+               state = {...state}
+               return state;
           
+          
+          
+     }
+     case 'DESCCARTCOUNT':{
+          console.log(state);
+          state = {...state}
+          state.cartItem = state.cartItem-1;
+          return state;
      }
        default: return state
      }
