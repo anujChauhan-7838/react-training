@@ -3,6 +3,7 @@ import {useState , useEffect } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { toast } from "react-toastify";
 import axios from 'axios';
+import {connect} from 'react-redux';
 function Cake(props){
     const cake = props.cake;
    
@@ -27,6 +28,12 @@ function Cake(props){
            console.log(response);
            if(response.data.status == 1){
             toast.success(response.data.message);
+            console.log('cart lemngth');
+            console.log(response.data.data.length);
+            props.dispatch({
+              type:'UPDATECHECKOUTCOUNT',
+              'cartCount':response.data.data.length
+            })
            }else{
             toast.error(response.data.message);
            }
@@ -63,4 +70,4 @@ function Cake(props){
     )
 }
 
-export default withRouter(Cake);
+export default connect()(withRouter(Cake));

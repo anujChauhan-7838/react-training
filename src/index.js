@@ -6,11 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import './reduxstore/store';
+import store from './reduxstore/store';
+import { Provider } from 'react-redux';
+
 
 axios.interceptors.request.use(
   (request)=>{
     console.log(request.url);
-    if(request.url.includes('add-to-cart')){
+    if(request.url.includes('add-to-cart') || request.url.includes('cart')){
       if(localStorage.getItem('token')){
         request.headers['Authorization'] = 'Bearer ' + localStorage.getItem('token');
       }else{
@@ -30,7 +34,9 @@ ReactDOM.render(
   <React.StrictMode>
      <ToastContainer 
      />
+     <Provider store={store}>
     <NewApp/>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

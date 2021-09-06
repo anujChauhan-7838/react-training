@@ -3,16 +3,36 @@ import {Link , withRouter,useLocation} from "react-router-dom";
 import {useState , useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import  queryString from 'query-string';
+import {connect} from 'react-redux';
+import axios from 'axios';
 
 
 function Nav(props){
-  
-    
     var [searchInvalid,setSearchInvalid] = useState(false);
     var query                            = queryString.parse(useLocation().search);
     var initSearch = typeof query.search != 'undefined'? query.search : '';
     var [search, setSearch] = useState(initSearch);
-
+    props.dispatch({
+      type:'CHECKLOGIN'
+    })
+    useEffect(()=>{
+      axios({
+          method:"get",
+          url:process.env.REACT_APP_BASEURL+"/auth/get-cart-products"
+      }).then(function(response){
+        props.dispatch({
+          type:'UPDATECHECKOUTCOUNT',
+          'cartCount':response.data.data.length
+        })
+            
+      }).catch(function(error){
+        props.dispatch({
+          type:'GETCHECKOUTCOUNT',
+        })   
+          
+      });
+  },[])
+   
 
 function handleSearchForm(event){
   event.preventDefault();
@@ -34,6 +54,9 @@ function handleInputBx(event){
 function logout(event){
     event.preventDefault();
     localStorage.removeItem("token");
+    props.dispatch({
+      type:"LOGOUT"
+    })
     props.history.push('/signin');
 }
 
@@ -48,7 +71,7 @@ function validateField(value){
 
 
       
-    console.log("localstroage="+localStorage.getItem('token'));
+
    
       return  (
       
@@ -67,7 +90,7 @@ function validateField(value){
     <form className="form-inline my-2 my-lg-0" onSubmit={(event)=>handleSearchForm(event)}>
       <input value={search} className={"form-control mr-sm-2" + (searchInvalid ? "border border-danger":'')} type="text"  name = "search" placeholder="Search" aria-label="Search" onChange={(event)=>handleInputBx(event)} />
       <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      {(typeof localStorage.getItem('token') == 'undefined' || localStorage.getItem('token') == null)?<div><button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signin">
+      {!props.isLoggedIn?<div><button className="btn btn-outline-success my-2 my-sm-0" type="submit"><Link to="/signin">
        Sign In
      </Link>
      </button>
@@ -76,6 +99,9 @@ function validateField(value){
      </Link>
      </button></div>:<div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
       <ul className="navbar-nav">
+      <Link to="/cart" className="btn btn-outline-success my-2 my-sm-0">
+       cart<sup style={{"color":"red"}}><strong>{props.cartItem}</strong></sup>
+     </Link>
         <li className="nav-item dropdown">
         <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={(event)=>logout(event)}>
        Logout
@@ -93,4 +119,11 @@ function validateField(value){
   
 }
 
-export default withRouter(Nav);
+export default connect(function(state,props){
+  console.log('reducer state') ;
+  console.log(state);
+  return {
+    isLoggedIn:state.isLoggedIn,
+    cartItem:state.cartItem
+  }
+})(withRouter(Nav));

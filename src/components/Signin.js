@@ -5,6 +5,7 @@ import FormErrors from './FormErrors';
 import 'bootstrap/dist/css/bootstrap.css';
 import Spinner from 'react-bootstrap/Spinner';
 import axios from "axios";
+import {connect} from 'react-redux';
 
 class Signin extends Component{
     
@@ -31,9 +32,13 @@ class Signin extends Component{
           url:process.env.REACT_APP_BASEURL+"/auth/login",
           data:{'email':this.state.username,'password':this.state.password}
         }).then((response)=>{
-             
+          console.log('response from login');
+              console.log(response);
               if(response.data.status == 1){
                    localStorage.setItem('token',response.data.access_token)
+                   this.props.dispatch({
+                     type:'SIGNIN'
+                   })
                    this.props.history.push('/');
               }else{
                 this.setState({formErrors:{...this.state.formErrors,gError:response.data.message}});
@@ -95,6 +100,11 @@ class Signin extends Component{
      componentWillUnmount(){
        this.setState({...this.state});
      }
+     componentWillUnmount(){
+       this.setState = (state,callback)=>{
+        return;
+    };
+     }
 
     render(){
       var logBtn = <span>Register Now</span>;
@@ -129,4 +139,4 @@ class Signin extends Component{
     }
 }
 
-export default Signin; 
+export default connect()(Signin); 
