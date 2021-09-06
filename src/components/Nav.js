@@ -15,23 +15,9 @@ function Nav(props){
     props.dispatch({
       type:'CHECKLOGIN'
     })
-  //   useEffect(()=>{
-  //     axios({
-  //         method:"get",
-  //         url:process.env.REACT_APP_BASEURL+"/auth/get-cart-products"
-  //     }).then(function(response){
-  //       props.dispatch({
-  //         type:'UPDATECHECKOUTCOUNT',
-  //         'cartCount':response.data.data.length
-  //       })
-            
-  //     }).catch(function(error){
-  //       props.dispatch({
-  //         type:'GETCHECKOUTCOUNT',
-  //       })   
-          
-  //     });
-  // },[])
+    props.dispatch({
+             type:'GETCHECKOUTCOUNT',
+    })
    
 
 function handleSearchForm(event){
@@ -120,7 +106,7 @@ function validateField(value){
 }
 
 export default connect(function(state,props){
-  console.log('reducer state') ;
+  console.log('reducer state nav') ;
   console.log(state);
   return {
     isLoggedIn:state.isLoggedIn,

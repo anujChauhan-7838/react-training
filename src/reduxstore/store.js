@@ -1,6 +1,6 @@
-import { createStore } from "redux";
+import { createStore , applyMiddleware } from "redux";
 import {reducer1}   from './reducer';
-
-var store = createStore(reducer1);
+import { middleware } from "./middleware";
+var store = createStore(reducer1,applyMiddleware(middleware));
 
 export default store;
