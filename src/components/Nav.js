@@ -100,7 +100,7 @@ function validateField(value){
      </button></div>:<div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
       <ul className="navbar-nav">
       <Link to="/cart" className="btn btn-outline-success my-2 my-sm-0">
-       cart<sup style={{"color":"red"}}><strong>{props.cartItem}</strong></sup>
+       cart<sup style={{"color":"red"}}><strong>{props.cartItem}</strong></sup> 
      </Link>
         <li className="nav-item dropdown">
         <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={(event)=>logout(event)}>
