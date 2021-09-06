@@ -3,9 +3,6 @@ import axios from 'axios';
 export var middleware = function(state){
     return function(next){
         return function(action){
-            console.log('----middleware--------');
-            console.log(localStorage.token);
-            console.log(action.type);
            if(localStorage.token && action.type == 'GETCHECKOUTCOUNT' ){
             axios({
                         method:"get",

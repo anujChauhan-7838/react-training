@@ -24,10 +24,7 @@ function Cart(props){
             url:process.env.REACT_APP_BASEURL+"/auth/get-cart-products"
         }).then(function(response){
             setIsLoading(false);
-            console.log('---------Set Item--------');
-            console.log(response)
             setCarts(response.data.data);
-            console.log(carts);
               
         }).catch(function(error){
             setIsLoading(false);
@@ -48,8 +45,6 @@ function Cart(props){
             url:process.env.REACT_APP_BASEURL+"/auth/update-p-cart",
             data:{'cartId':carts[index].id,'qty':event.target.value}
           }).then((response)=>{
-            console.log('response from update cart');
-                console.log(response);
                 if(response.data.status == 1){
                 }else{
                     toast.error(response.data.message);
@@ -63,7 +58,6 @@ function Cart(props){
 
     var removeItemFromCart = (event,index)=>{
         event.preventDefault();
-        console.log(event.target.value,index);
         var refreshingData = carts
         
         axios({
@@ -71,11 +65,8 @@ function Cart(props){
            url:process.env.REACT_APP_BASEURL+"/auth/remove-cart-item",
            data:{'cartId':carts[index].id}
          }).then((response)=>{
-           console.log('response from update cart');
-               
                if(response.data.status == 1){
                 refreshingData.splice(index);
-                console.log(refreshingData);
                 setCarts([...refreshingData]); 
                 toast.success(response.data.message);
                 props.dispatch({

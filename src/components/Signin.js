@@ -32,8 +32,7 @@ class Signin extends Component{
           url:process.env.REACT_APP_BASEURL+"/auth/login",
           data:{'email':this.state.username,'password':this.state.password}
         }).then((response)=>{
-          console.log('response from login');
-              console.log(response);
+          
               if(response.data.status == 1){
                    localStorage.setItem('token',response.data.access_token)
                    this.props.dispatch({

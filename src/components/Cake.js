@@ -24,12 +24,9 @@ function Cake(props){
         url:process.env.REACT_APP_BASEURL+"/auth/add-to-cart",
         data:data
       }).then((response)=>{
-          console.log('----cart api--- ');
-           console.log(response);
+          
            if(response.data.status == 1){
             toast.success(response.data.message);
-            console.log('cart lemngth');
-            console.log(response.data.data.length);
             props.dispatch({
               type:'UPDATECHECKOUTCOUNT',
               'cartCount':response.data.data.length

@@ -4,6 +4,7 @@ import {useState , useEffect } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { toast } from "react-toastify";
 import axios from 'axios';
+import {connect} from 'react-redux';
 function Newcake(props){
     
     const cake = props.cake;
@@ -24,10 +25,13 @@ function Newcake(props){
           url:process.env.REACT_APP_BASEURL+"/auth/add-to-cart",
           data:data
         }).then((response)=>{
-            console.log('----cart api--- ');
-             console.log(response);
+            
              if(response.data.status == 1){
               toast.success(response.data.message);
+              props.dispatch({
+               type:'UPDATECHECKOUTCOUNT',
+               'cartCount':response.data.data.length
+             })
              }else{
               toast.error(response.data.message);
              }
@@ -108,4 +112,4 @@ function Newcake(props){
     )
 }
 
-export default withRouter(Newcake);
+export default connect()(withRouter(Newcake));
