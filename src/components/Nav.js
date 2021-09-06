@@ -15,23 +15,23 @@ function Nav(props){
     props.dispatch({
       type:'CHECKLOGIN'
     })
-    useEffect(()=>{
-      axios({
-          method:"get",
-          url:process.env.REACT_APP_BASEURL+"/auth/get-cart-products"
-      }).then(function(response){
-        props.dispatch({
-          type:'UPDATECHECKOUTCOUNT',
-          'cartCount':response.data.data.length
-        })
+  //   useEffect(()=>{
+  //     axios({
+  //         method:"get",
+  //         url:process.env.REACT_APP_BASEURL+"/auth/get-cart-products"
+  //     }).then(function(response){
+  //       props.dispatch({
+  //         type:'UPDATECHECKOUTCOUNT',
+  //         'cartCount':response.data.data.length
+  //       })
             
-      }).catch(function(error){
-        props.dispatch({
-          type:'GETCHECKOUTCOUNT',
-        })   
+  //     }).catch(function(error){
+  //       props.dispatch({
+  //         type:'GETCHECKOUTCOUNT',
+  //       })   
           
-      });
-  },[])
+  //     });
+  // },[])
    
 
 function handleSearchForm(event){
