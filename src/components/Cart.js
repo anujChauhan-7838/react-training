@@ -6,6 +6,7 @@ import './cart.css'
 import { toast } from "react-toastify";
 import {connect} from 'react-redux';
 import {Link } from 'react-router-dom';
+import Cartitem from './Cartitem';
 
 function Cart(props){
     var [carts,setCarts] = useState([]);
@@ -15,6 +16,21 @@ function Cart(props){
     var [couponCode,setCouponCode] = useState('');
     var [couponCodeError,setCouponCodeError] = useState('');
     var [couponCodeApplied,setCouponCodeApplied] = useState('');
+    var [isRemovingFromCart,setIsRemovingFromCart] = useState(false);
+    var [name,setName] = useState('');
+    var [mobileNo,setMobileNo] = useState('');
+    var [address,setAddress] = useState('');
+    var [pincode,setPincode] = useState(''); 
+    var [nameError,setNameError] = useState(false);
+    var [mobileError,setMobileError] = useState(false);
+    var [addressError,setAddressError] = useState(false);
+    var [pincodeError,setPincodeError] = useState(false);
+
+
+
+   
+   
+    
     
     useEffect(()=>{
         setCarts([]);
@@ -35,10 +51,10 @@ function Cart(props){
 
 
    var  increaseQnty = (event ,index) => {
-         console.log(event.target.value,index);
+         
          var refreshingData = carts
          refreshingData[index].qty = parseInt(event.target.value);
-         console.log(refreshingData);
+         
          setCarts([...refreshingData]); 
          axios({
             method:"post",
@@ -57,8 +73,11 @@ function Cart(props){
     }
 
     var removeItemFromCart = (event,index)=>{
+        
         event.preventDefault();
         var refreshingData = carts
+        setIsRemovingFromCart(true);
+
         
         axios({
            method:"post",
@@ -66,14 +85,17 @@ function Cart(props){
            data:{'cartId':carts[index].id}
          }).then((response)=>{
                if(response.data.status == 1){
-                refreshingData.splice(index);
+                refreshingData.splice(index,1);
+               
                 setCarts([...refreshingData]); 
+                setIsRemovingFromCart(false);
                 toast.success(response.data.message);
                 props.dispatch({
                     type:'DESCCARTCOUNT'
                    
                 })
                }else{
+                setIsRemovingFromCart(false);
                    toast.error(response.data.message);
                }
                
@@ -98,6 +120,61 @@ function Cart(props){
             setCouponCodeError('Invalid Coupon');
         }
     }
+
+    var handleInput = (event , varName)=>{
+           if(varName == 'name'){
+               setName(event.target.value);
+               setNameError(false);
+           }else if(varName == 'mobile'){
+            setMobileNo(event.target.value);
+            setMobileError(false)
+
+        }else if(varName == 'address'){
+            setAddress(event.target.value);
+            setAddressError(false)
+        }else if(varName == 'pincode'){
+            setPincode(event.target.value);
+            setPincodeError(false)
+        }
+    }
+
+    var moveToPaymentDetailPage = (event ,grandTotal) =>{
+        event.preventDefault();
+        
+        if(name == ''){
+            setNameError(true);
+            return true;
+        }else if(mobileNo == '' || mobileNo.length > 10 ||mobileNo.length < 10 ){
+            setMobileError(true);
+            return true;
+        }else if(address == ''){
+            setAddressError(true);
+            return true;
+        }else if(pincode == ''){
+            setPincodeError(true);
+            return true;
+        }
+        var orderInfo = {
+            'orderId':'',
+            'userId':8,
+            'grandTotal':grandTotal,
+            'couponCode':couponCode,
+            'couponDiscount':discount,
+            'paymentStatus':0,
+            'orderStatus':0,
+            'orderItems':[...carts],
+            'userInfo':{
+                'name':name,
+                'mobileNo':mobileNo,
+                'address':address,
+                'pincode':pincode
+            }
+        }
+        props.dispatch({type:'GENERATE_ORDER','payload':orderInfo});
+        props.history.push('/payment');
+
+       
+    }
     if(carts.length > 0){
         let totalAmount = 0;
         for (const [i, cart] of carts.entries()) {
@@ -105,6 +182,7 @@ function Cart(props){
             totalAmount = totalAmount + cart.qty * parseInt(priceTagArr[1]);
         }  
         let grandTotal = totalAmount - discount;
+        
         return (
       
             <div className="container-fluid">
@@ -124,29 +202,10 @@ function Cart(props){
                             <tbody>
                                     {
                                     carts.map((cart,index)=>{
-                                        var priceArr = cart.cake.price.split('$');
-                                        var price    = parseInt(priceArr[1]);
+                                       
+                                       
                                         return (
-                                            <tr key={index}>
-                                            <td>
-                                                <figure className="itemside align-items-center">
-                                                    <div className="aside"><img src={process.env.REACT_APP_IMAGE_URL+"/"+cart.cake.img} className="img-sm" /></div>
-                                                    <figcaption className="info"> <a href="#" className="title text-dark" data-abc="true">{cart.cake.name}</a>
-                                                        <p className="text-muted small">type: {cart.cake.type} <br /> Flavour: {cart.cake.flavour}</p>
-                                                    </figcaption>
-                                                </figure>
-                                            </td>
-                                            <td> <select className="form-control" onChange={(event) =>increaseQnty(event,index)} value={cart.qty}>
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                </select> </td>
-                                            <td>
-                                                <div className="price-wrap"> <var className="price">${ price}</var></div>
-                                            </td>
-                                            <td className="text-right d-none d-md-block"> <a href="" className="btn btn-light" data-abc="true" onClick={(event)=>removeItemFromCart(event,index)}> Remove</a> </td>
-                                        </tr>
+                                            <Cartitem key={index} index={index}  isRemovingFromCart={isRemovingFromCart} cart={cart} increaseQnty={increaseQnty} removeItemFromCart={removeItemFromCart}></Cartitem>
                                         )
                                     })
                                 }
@@ -172,6 +231,41 @@ function Cart(props){
                         </form>
                     </div>
                 </div>
+                <form onSubmit={(event)=>moveToPaymentDetailPage(event,grandTotal)}>
+                <div className="card mb-3">
+                    <div className="card-body">
+                        <h6 className="">Address</h6>
+                        
+                            <div className="form-group" >
+                                <div className="input-group"> 
+                                <input type="text" className="form-control coupon" onChange={(event)=>handleInput(event,'name')} name="name" placeholder="Enter Your Name" /> 
+                                 </div>
+                                 {nameError && <p style={{"color":"red"}}>Invalid Name</p>}
+                            </div>
+
+                            <div className="form-group" >
+                                <div className="input-group"> 
+                                <input type="text" className="form-control coupon" onChange={(event)=>handleInput(event,'mobile')} name="mobile" placeholder="Enter Your Contact Number" /> 
+                                 </div>
+                                 {mobileError && <p style={{"color":"red"}}>Invalid Mobile number. Only 10 numeric digits are allowed</p>}
+                            </div>
+
+                            <div className="form-group" >
+                                <div className="input-group"> 
+                                <input type="text" className="form-control coupon" onChange={(event)=>handleInput(event,'address')} name="address" placeholder="Enter Your Address" /> 
+                                 </div>
+                                 {addressError && <p style={{"color":"red"}}>Invalid Address</p>}
+                            </div>
+
+                            <div className="form-group" >
+                                <div className="input-group"> 
+                                <input type="text" className="form-control coupon" onChange={(event)=>handleInput(event,'pincode')} name="pincode" placeholder="Enter Your Pincode" /> 
+                                 </div>
+                                 {pincodeError && <p style={{"color":"red"}}>Invalid Pincode</p>}
+                            </div>
+                        
+                    </div>
+                </div>
 
                 <div className="card">
                     <div className="card-body">
@@ -187,9 +281,11 @@ function Cart(props){
                             <dt>Total:</dt>
                             <dd className="text-right text-dark b ml-3"><strong>${grandTotal}</strong></dd>
                         </dl>
-                        <hr/> <a href="#" className="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <Link to="/" className="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</Link>
+                        <hr/> <button type="submit" className="btn btn-out btn-primary btn-square btn-main"> Make Purchase </button> <Link to="/" className="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</Link>
                     </div>
+                  
                 </div>
+                </form>
             </aside>
         </div>
     </div>

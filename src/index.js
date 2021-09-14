@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 
 axios.interceptors.request.use(
   (request)=>{
+    console.log('latest');
     console.log(request.url);
     if(request.url.includes('add-to-cart') || request.url.includes('cart')){
       if(localStorage.getItem('token')){

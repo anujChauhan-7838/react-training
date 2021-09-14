@@ -1,7 +1,8 @@
 import axios from 'axios';
 export function reducer1(state={
      isLoggedIn:typeof localStorage.getItem('token') != 'undefined' && localStorage.getItem('token') != null,
-     cartItem:0
+     cartItem:0,
+     paymentOrderId:0
 },action){
      switch(action.type){
        case 'SIGNIN':{
@@ -32,6 +33,17 @@ export function reducer1(state={
           state.cartItem = state.cartItem-1;
           return state;
      }
+     case 'SAVEORDERID':{
+          state = {...state}
+          state.paymentOrderId = action.payload;
+          return state;
+     }
+
+     case 'GETORDERID':{
+          state = {...state}
+          return state;
+     }
+     
        default: return state
      }
 }

@@ -11,6 +11,8 @@ import Forgot from './Forgot';
 import Otpverify from './Optiverify';
 import Cakeview from './Cakeview';
 import Footer from './Footer';
+import Orders from './Orders';
+import payment from './payment'
 
 function NewApp(){
     return (
@@ -27,6 +29,8 @@ function NewApp(){
               <Route exact path="/view-cake/:cakeSlug" component={Cakeview} />
               <Route exact path="/admin" component={Admin} />
               <Route exact path="/cart" component={Cart} />
+              <Route exact path="/my-orders" component={Orders} />
+              <Route exact path="/payment" component={payment} />
               <Route exact path="/forgot" component={Forgot} />
               <Route exact path="/signup" component={Signup} />
               <Route exact path="/otp-verify" component={Otpverify} />
