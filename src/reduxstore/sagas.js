@@ -6,7 +6,6 @@ function generateOrderAPi(payload){
        return axios({
         method:"post",
         url:process.env.REACT_APP_BASEURL+"/auth/generate-order",
-        url:"http://localhost:8000/auth/generate-order",
         data:payload
       });
 }
